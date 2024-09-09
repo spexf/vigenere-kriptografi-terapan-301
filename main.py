@@ -1,43 +1,34 @@
+from encrypt import Enkripsivigenere
+from decrypt import Decryptvigenere
 from string import ascii_uppercase as up
 
-class Vigenere:
+class VigenereTable:
     def __init__(self) -> None:
         self.table = []
         for i in range(len(up)):
-            self.table.append(up[i:]+up[:i])
-            
+            self.table.append(up[i:] + up[:i])
+
     def generateTable(self):
         return self.table
-    
-    def padding(self, plain, key):
-        panjangPlain = len(plain)
-        keyPadding = key * panjangPlain
-        return keyPadding[:panjangPlain]
-            
-    def encrypt(self, plain, key):
-        padding = self.padding(plain,key)
-        table = self.generateTable()
-        panjang_plain = len(plain)
-        plainToIndex = []
-        keyToIndex = []
-        for z in plain.upper():
-            plainToIndex.append(table[0].find(z))
-        # print(plainToIndex)
-        for i in padding.upper():
-            for x in table:
-                if x[0] == i:
-                    keyToIndex.append(up.find(i))
-        # print(keyToIndex)
-        cipherText = ""
-        indexNumber = 0
-        for i in keyToIndex:
-            for p in range(i,i+1):
-                cipherText += table[int(p)][plainToIndex[indexNumber]]
-            indexNumber +=1
-        return cipherText        
-                    
-            
-            
-    
-x = Vigenere()
-print("Hasil enkripsi : ",x.encrypt("udinmakannasi", "tes"))
+
+# Buat objek untuk enkripsi, dekripsi, dan tabel
+vigenere_table = VigenereTable()
+vigenere_encrypt = Enkripsivigenere()
+vigenere_decrypt = Decryptvigenere()
+
+# Tampilkan tabel Vigenere
+print("Tabel Vigenere:")
+for row in vigenere_table.generateTable():
+    print(" ".join(row))
+
+# Input dari pengguna
+plain_text = input("\nMasukkan plaintext: ")
+key = input("Masukkan key: ")
+
+# Enkripsi
+cipher_text = vigenere_encrypt.encrypt(plain_text, key, vigenere_table.generateTable())
+print("\nHasil enkripsi: ", cipher_text)
+
+# Dekripsi
+decrypted_text = vigenere_decrypt.decrypt(cipher_text, key, vigenere_table.generateTable())
+print("Hasil dekripsi: ", decrypted_text)
